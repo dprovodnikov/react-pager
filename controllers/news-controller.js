@@ -47,7 +47,7 @@ export function remove(req, res, next) {
     .catch(next);
 }
 
-//update an instance
+// update an instance
 export function update(req, res, next) {
   const { id:_id, title = '', content = '' } = req.body;
 
@@ -65,6 +65,15 @@ export function update(req, res, next) {
         .json({ news });
     })
     .catch(next);
+}
+
+// get page by page number
+export function getPage(req, res, next) {
+  const { pageNumber, perPage } = req.params;
+
+  
+
+  res.json({ pageNumber, perPage });
 }
 
 

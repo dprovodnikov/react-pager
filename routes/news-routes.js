@@ -6,5 +6,6 @@ router.get('/all', NewsController.getAll);
 router.post('/save', NewsController.save);
 router.post('/remove', NewsController.remove);
 router.post('/update', NewsController.update);
+router.get('/:pageNumber/:perPage', NewsController.getPage);
 
 export default router;

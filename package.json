@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec babel-node app.js"
+    "start": "nodemon --exec babel-node app.js",
+    "generate-test-data": "babel-node ./utils/generate-test-data.js"
   },
   "repository": {
     "type": "git",
@@ -23,5 +24,9 @@
     "body-parser": "^1.16.1",
     "express": "^4.14.1",
     "mongoose": "^4.8.4"
+  },
+  "devDependencies": {
+    "request": "^2.79.0",
+    "request-promise": "^4.1.1"
   }
 }
