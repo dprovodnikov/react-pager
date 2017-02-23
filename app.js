@@ -3,6 +3,9 @@ import config from './config';
 import { join } from 'path';
 import errorHandler from './middlewares/error-handler';
 import mongoose from 'mongoose';
+import bodyParser from 'body-parser';
+
+import newsRouter from './routes/news-routes';
 
 const app = express();
 
@@ -14,6 +17,10 @@ mongoose.connect(config.db, (err) => {
 });
 
 app.use(express.static(join(__dirname, '/public')));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+app.use('/news', newsRouter);
 
 app.listen(config.port, err => {
   if (err) throw err;
