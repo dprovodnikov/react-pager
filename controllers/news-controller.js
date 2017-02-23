@@ -71,9 +71,22 @@ export function update(req, res, next) {
 export function getPage(req, res, next) {
   const { pageNumber, perPage } = req.params;
 
-  
+  if (pageNumber <= 0 || perPage <= 0) {
+    return next({
+      status: 400,
+      message: 'Bad credentials'
+    })
+  }
 
-  res.json({ pageNumber, perPage });
+  let from = pageNumber * perPage - perPage;
+
+  NewsModel.find().skip(+from).limit(+perPage)
+    .then(news => {
+      return news
+        ? res.json({ news })
+        : next();
+    })
+    .catch(next);
 }
 
 
