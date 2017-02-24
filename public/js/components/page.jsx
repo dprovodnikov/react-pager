@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import * as NewsActions from '../actions/news-actions.js';
 import { hashHistory } from 'react-router';
+import * as NewsActions from '../actions/news-actions.js';
 
 class Page extends Component {
 

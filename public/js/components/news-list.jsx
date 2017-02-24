@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import NewsItem from './news-item.jsx';
 import Pagination from './pagination.jsx';
 import NewsStore from '../stores/news-store.js';
+import $ from 'jquery';
 
 import { hashHistory } from 'react-router';
 
@@ -34,6 +35,8 @@ class NewsList extends Component {
       pagesCount: NewsStore.getPagesCount(),
       news: NewsStore.getNews(),
     });
+  
+    $('body').animate({'scrollTop': 0}, 200);
   }
 
   render() {
