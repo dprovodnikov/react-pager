@@ -9,6 +9,7 @@ class NewsStore extends EventEmitter {
     this.perPage = 15;
     this.newsCount = 0;
     this.news = [];
+    this.loading = false;
   }
 
   loadNewsCount() {
@@ -23,6 +24,7 @@ class NewsStore extends EventEmitter {
   }
 
   loadNewsForPage(page) {
+    this.loading = true;
     return $.get(`/news/${page}/${this.perPage}`);
   }
 
@@ -39,13 +41,17 @@ class NewsStore extends EventEmitter {
   }
 
   changePage(page) {
+    if (this.loading) return false;
+
     this.currentPage = page;
     this.loadNewsForPage(page)
       .done(data => {
         this.news = data.news;
         this.emit('change');
+        this.loading = false;
       })
       .fail(err => {
+        this.loading = false;
         if (err) throw err;
       });
   }

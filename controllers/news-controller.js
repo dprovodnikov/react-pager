@@ -89,6 +89,13 @@ export function getPage(req, res, next) {
     .catch(next);
 }
 
+// get pages count
+export function getNewsCount(req, res, next) {
+  NewsModel.count()
+    .then(count => res.json({ count }))
+    .catch(next);
+}
+
 
 
 

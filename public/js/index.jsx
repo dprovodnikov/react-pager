@@ -12,6 +12,7 @@ render(
   <Router history={hashHistory}>
     <Route path="/" component={Layout}>
       <IndexRoute component={NewsList}></IndexRoute>
+      <Route path="/:pageNumber" component={NewsList} />
     </Route>
   </Router>
 , target);

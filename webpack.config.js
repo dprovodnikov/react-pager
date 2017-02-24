@@ -4,7 +4,7 @@ const join = require('path').join;
 module.exports = {
   context: join(__dirname, '/public'),
 
-  entry: './js/index.js',
+  entry: './js/index.jsx',
 
   output: {
     path: './public/build/',

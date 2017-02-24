@@ -3,18 +3,20 @@ import NewsItem from './news-item.jsx';
 import Pagination from './pagination.jsx';
 import NewsStore from '../stores/news-store.js';
 
+import { hashHistory } from 'react-router';
+
 class NewsList extends Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      currentPage: NewsStore.getCurrentPage(),
-      pagesCount: 0,
-      news: [],
+      currentPage: props.params.pageNumber,
+      pagesCount: NewsStore.getPagesCount(),
+      news: NewsStore.getNews(),
     }
   }
-  
+
   componentWillMount() {
     NewsStore.on('change', this.updateState.bind(this));
 
@@ -34,10 +36,9 @@ class NewsList extends Component {
     });
   }
 
-
   render() {
-
-    const { currentPage, pagesCount, news } = this.state;
+    const { pagesCount, news } = this.state;
+    let { pageNumber:currentPage } = this.props.params;
 
     const newsList = news.map(newsItem => {
       return <NewsItem key={newsItem._id} item={newsItem} />
