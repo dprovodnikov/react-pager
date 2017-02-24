@@ -1,5 +1,5 @@
 export function range(to) {
-  if (to <= 0) return false;
+  if (to <= 0) return [];
   
   let output = [];
 

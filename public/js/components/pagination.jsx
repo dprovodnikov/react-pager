@@ -5,10 +5,10 @@ import { range } from '../utils/range.js';
 class Pagination extends Component {
   render() {
 
-    const activePage = 2
-    
-    const pages = range(5).map((page, i) => {
-      return <Page key={page} page={page+1} isActive={ activePage == i + 1} />
+    const { currentPage = 1, pagesCount } = this.props;
+
+    const pages = range(pagesCount).map((page, i) => {
+      return <Page key={page} page={page+1} isActive={ currentPage == i + 1} />
     });
 
     return (
