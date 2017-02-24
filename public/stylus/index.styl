@@ -1,10 +1,142 @@
+@import './vars'
+
 *
-  margin: 0
-  padding: 0
-  box-sizing: border-box
+  margin 0
+  padding 0
+  box-sizing border-box
 
 html, body
-  height: 100%
+  height 100%
 
 body
-  background: #eee
+  background #eee
+
+.app-container
+  width 840px
+  margin 0 auto;
+  height 100%
+
+.main-color
+  color $main-red 
+
+/***********************************/
+/*             Header              */
+/***********************************/
+.app-header
+  height 70px
+  background #fff
+  box-shadow 0 3px 3px 2px rgba(0, 0, 0, .1);
+  &__title
+    font normal 24px 'Hind'
+    height 100%
+    display flex
+    align-items center
+    color $main-dark
+
+/***********************************/
+/*            Content              */
+/***********************************/
+.app-content
+  padding 50px 0
+
+.news-list
+  width 100%
+  display flex
+  justify-content center
+  align-items center
+  flex-direction column
+.news-item
+  width 90%
+  padding 10px 15px
+  background #fff
+  margin 5px 0
+  box-shadow 0 0 5px 1px rgba(0, 0, 0, .1); 
+  &__header
+    display flex
+    align-items center
+    justify-content space-between
+    i
+      font-size 17px
+      color #aaa
+      cursor pointer
+      transition color .1s
+      &:hover
+        color #3d3d3d
+        
+  &__title
+    font normal 16px 'Baloo'
+    color $main-dark
+  &__content
+    font normal 14px 'Hind'
+    color $main-dark
+
+/***********************************/
+/*            Content              */
+/***********************************/
+.news-pagination
+  width 90%
+  margin 40px auto
+  display flex
+  align-items center
+  justify-content center
+  &__list
+    display flex
+    align-items center
+    justify-content center
+  &__page
+    list-style none
+    height 40px
+    width @height
+    display flex
+    align-items center
+    justify-content center
+    font normal 15px 'Hind'
+    color $main-dark
+    border-radius 3px
+    cursor pointer
+    margin 0 3px
+    transition background .1s
+    &--active
+      background $main-red
+      color #fff
+      &:hover
+        background darken($main-red, 5%) !important
+    &:hover
+      background #ccc
+      color #fff
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
