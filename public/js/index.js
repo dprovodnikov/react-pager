@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import Layout from './components/layout';
 import { Router, Route, hashHistory, IndexRoute } from 'react-router';
+import Styles from '../stylus/index.styl'
 
 const target = document.getElementById('app-root');
 
