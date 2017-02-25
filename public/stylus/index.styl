@@ -15,6 +15,9 @@ body
   width 840px
   margin 0 auto;
   height 100%
+  @media screen and (max-width: 860px)
+    width 100%
+  
 
 .main-color
   color $main-red 
@@ -32,6 +35,8 @@ body
     display flex
     align-items center
     color $main-dark
+    @media screen and (max-width: 860px)
+      margin 0 15px
 
 /***********************************/
 /*            Content              */
@@ -46,7 +51,8 @@ body
   align-items center
   flex-direction column
 .news-item
-  width 90%
+  width 95%
+  flex-shrink 1
   padding 10px 15px
   background #fff
   margin 5px 0
@@ -78,11 +84,11 @@ body
   margin 40px auto
   display flex
   align-items center
-  justify-content center
   &__list
     display flex
     align-items center
     justify-content center
+    width 100%
   &__page,
   &__arrow
     list-style none
@@ -113,8 +119,18 @@ body
       background #fff !important
       i
         color $main-red
-
-
+  &__mobile
+    align-self stretch
+    flex-grow 1
+    padding 0 20px
+    background #fff
+    font normal 15px 'Baloo'
+    display flex
+    align-items center
+    justify-content center
+    color $main-dark
+    text-transform uppercase
+    box-shadow 0 0 5px 1px rgba(0, 0, 0, .1); 
 
 
 

@@ -1,9 +1,41 @@
 import React, { Component } from 'react';
 import Page from './page.jsx';
+import PageMobile from './page-mobile.jsx';
 import { range } from '../utils/range.js';
 import { hashHistory } from 'react-router';
+import * as NewsActions from '../actions/news-actions.js';
 
 class Pagination extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      currentWidth: document.documentElement.clientWidth,
+      breakpoint: 550,
+    }
+  }
+
+  reloadOnBreakpoint() {
+    const { currentWidth, breakpoint } = this.state;
+    const width = document.documentElement.clientWidth;
+
+    if (currentWidth >= breakpoint && width <= breakpoint) {
+      location.reload();
+    }
+
+    if (currentWidth <= breakpoint && width >= breakpoint) {
+      location.reload();
+    }
+  }
+
+  componentWillMount() {
+    window.addEventListener('resize', this.reloadOnBreakpoint.bind(this));
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.reloadOnBreakpoint.bind(this));
+  }
 
   hasPrev(current) {
     return current > 1;
@@ -29,9 +61,15 @@ class Pagination extends Component {
 
     const { currentPage = 1, pagesCount } = this.props;
 
-    const pages = range(pagesCount).map((page, i) => {
-      return <Page key={page} page={page+1} isActive={ currentPage == i + 1} />
-    });
+    const pages = (
+      document.documentElement.clientWidth <= this.state.breakpoint
+        ? <PageMobile currentPage={currentPage} total={pagesCount}/>
+        : range(pagesCount).map((page, i) => {
+            return <Page key={page} page={page+1} isActive={ currentPage == i + 1} />
+          })
+    );
+
+    NewsActions.changePage(currentPage);
 
     const prevButton = (
       currentPage > 1

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { hashHistory } from 'react-router';
-import * as NewsActions from '../actions/news-actions.js';
 
 class Page extends Component {
 
@@ -14,10 +13,6 @@ class Page extends Component {
     const className = isActive 
       ? 'news-pagination__page--active'
       : ''
-
-    if (isActive) {
-      NewsActions.changePage(page);
-    }
 
     return (
       <li className={`news-pagination__page ${className}`}
