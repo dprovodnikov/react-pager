@@ -1,9 +1,9 @@
-export function range(to) {
-  if (to <= 0) return [];
+export function range(from, to) {
+  if (to <= from) return [];
   
   let output = [];
 
-  for (let i = 0; i < to; i++) {
+  for (let i = from; i <= to; i++) {
     output.push(i);
   } 
 

@@ -6,7 +6,6 @@ import { hashHistory } from 'react-router';
 import * as NewsActions from '../actions/news-actions.js';
 
 class Pagination extends Component {
-
   constructor(props) {
     super(props);
 
@@ -57,41 +56,83 @@ class Pagination extends Component {
     }
   }
 
+  sendTo(page) {
+    hashHistory.push(`/${page}`);
+  }
+
+  getPages() {
+    let output;
+    const { currentPage, pagesCount } = this.props;
+
+    if (document.documentElement.clientWidth <= this.state.breakpoint) {
+      output = <PageMobile currentPage={currentPage} total={pagesCount}/>
+    } else {
+      output = range(this.getRangeStart(), this.getRangeEnd()).map(page => {
+        return <Page key={page} page={page} isActive={currentPage == page} />
+      });
+    }
+    
+    return output;
+  }
+
+  getRangeStart() {
+    const { pagesRange, currentPage, pagesCount } = this.props;
+    let start = currentPage - pagesRange;
+
+    return (start > 0) ? start : 1;
+  }
+
+  getRangeEnd() {
+    const { pagesRange, currentPage, pagesCount } = this.props;
+    let end = +currentPage + pagesRange;
+
+    return (end < pagesCount) ? end : pagesCount
+  }
+
+  getFirstPageLink() {
+    return (this.getRangeStart() !== 1)
+      ? <li onClick={this.sendTo.bind(this, 1)}
+          className="news-pagination__page news-pagination__first--ellipsis">1
+        </li>
+      : null
+  }
+
+  getLastPageLink() {
+    const { pagesCount:count } = this.props
+
+    return (this.getRangeEnd() < count)
+      ? <li onClick={this.sendTo.bind(this, count)}
+          className="news-pagination__page news-pagination__last--ellipsis">{count}
+        </li>
+      : null
+  }
+
   render() {
-
     const { currentPage = 1, pagesCount } = this.props;
-
-    const pages = (
-      document.documentElement.clientWidth <= this.state.breakpoint
-        ? <PageMobile currentPage={currentPage} total={pagesCount}/>
-        : range(pagesCount).map((page, i) => {
-            return <Page key={page} page={page+1} isActive={ currentPage == i + 1} />
-          })
-    );
 
     NewsActions.changePage(currentPage);
 
-    const prevButton = (
-      currentPage > 1
+    const pages = this.getPages();
+
+    const prevButton = currentPage > 1
       ? <li className="news-pagination__arrow" onClick={this.decreasePage.bind(this, currentPage)}>
           <i className="ion-chevron-left"></i>
         </li>
       : null
-    );
 
-    const nextButton = (
-      currentPage < pagesCount
+    const nextButton = currentPage < pagesCount
       ? <li className="news-pagination__arrow" onClick={this.increasePage.bind(this, currentPage)}>
           <i className="ion-chevron-right"></i>
         </li>
       : null
-    );
 
     return (
       <div className="news-pagination">
         <ul className="news-pagination__list">
           {prevButton}
+          {this.getFirstPageLink()}
           {pages}
+          {this.getLastPageLink()}
           {nextButton}
         </ul>
       </div>

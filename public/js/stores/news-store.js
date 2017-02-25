@@ -10,6 +10,7 @@ class NewsStore extends EventEmitter {
     this.newsCount = 0;
     this.news = [];
     this.loading = false;
+    this.pagesRange = 2;
   }
 
   loadNewsCount() {
@@ -36,11 +37,15 @@ class NewsStore extends EventEmitter {
     return this.currentPage;
   }
 
+  getPagesRange() {
+    return this.pagesRange;
+  }
+
   getNews() {
     return this.news;
   }
 
-  changePage(page) {
+  changePage(page = 1) {
     if (this.loading) return false;
 
     this.currentPage = page;

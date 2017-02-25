@@ -103,6 +103,7 @@ body
     cursor pointer
     margin 0 3px
     transition background .1s
+    position relative
     &--active
       background $main-red
       color #fff
@@ -111,6 +112,30 @@ body
     &:hover
       background #ccc
       color #fff
+  &__first--ellipsis,
+  &__last--ellipsis
+    margin-right 20px
+    &:hover:after
+      color $main-dark
+    &:after
+      pointer-events none
+      content '...'
+      width 50%
+      position absolute
+      top 0; bottom 0
+      right -50%
+      display flex
+      justify-content center
+      align-items center
+      letter-spacing 2px
+      margin auto
+  &__last--ellipsis
+    margin-right 0
+    margin-left 20px
+    &:after
+      left -50%
+      right auto
+
   &__arrow
     background #fff
     box-shadow 0 0 5px 1px rgba(0, 0, 0, .1); 
