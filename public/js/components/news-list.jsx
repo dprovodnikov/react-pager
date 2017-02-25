@@ -31,9 +31,16 @@ class NewsList extends Component {
   }
 
   updateState() {
+    const { pageNumber } = this.props.params;
+    const pagesCount = NewsStore.getPagesCount();
+
+    if (pageNumber > pagesCount) {
+      return hashHistory.push(`/${pagesCount}`);
+    }
+
     this.setState({
       currentPage: NewsStore.getCurrentPage(),
-      pagesCount: NewsStore.getPagesCount(),
+      pagesCount: pagesCount,
       news: NewsStore.getNews(),
     });
   
