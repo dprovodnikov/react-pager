@@ -30,9 +30,19 @@ class NewsStore extends EventEmitter {
     return $.get(`/news/${page}/${this.perPage}/?q=${this.searchQuery}`);
   }
 
-  setSearchQuery(query) {
+  changeSearchQuery(query) {
     this.searchQuery = query;
     this.loadNewsCount();
+  }
+
+  deleteNews(_id) {
+    $.post('/news/remove', { _id })
+      .done(affected => {
+        this.loadNewsCount();
+      })
+      .fail(err => {
+        if (err) throw err;
+      })
   }
 
   getPagesCount() {
@@ -70,6 +80,8 @@ class NewsStore extends EventEmitter {
   handleActions(action) {
     switch (action.type) {
       case 'PAGE_CHANGE': this.changePage(action.page); break;
+      case 'SEARCH_QUERY_CHANGE': this.changeSearchQuery(action.query); break;
+      case 'NEWS_DELETE': this.deleteNews(action._id); break;
     }
   }
 

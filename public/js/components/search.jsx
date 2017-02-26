@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import NewsStore from '../stores/news-store.js';
+import * as NewsActions from '../actions/news-actions.js';
 
 class Search extends Component {
   
   handleInput() {
     let { value } = this.refs.q;
-    NewsStore.setSearchQuery(value);
+    NewsActions.changeSearchQuery(value);
   }
 
   render() {

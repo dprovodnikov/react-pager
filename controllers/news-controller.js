@@ -31,7 +31,7 @@ export function save(req, res, next) {
 
 // delete an instance
 export function remove(req, res, next) {
-  const { id:_id } = req.body;
+  const { _id } = req.body;
 
   if (!_id) {
     return next({
