@@ -19,6 +19,8 @@ body
   justify-content space-between
   @media screen and (max-width: 860px)
     width 100%
+  & > div
+    width 100%
 
 .main-color
   color $main-red 
@@ -85,6 +87,11 @@ body
     margin 10px 0
     @media screen and (max-width: 600px)
       margin 10px 15px
+  span
+    display flex
+    align-items center
+    justify-content center
+    flex-direction column
 .news-item
   width 95%
   flex-shrink 1
@@ -193,54 +200,64 @@ body
     box-shadow 0 0 5px 1px rgba(0, 0, 0, .1); 
 
 /***********************************/
+/*       notification popup        */
+/***********************************/
+.notif-popup
+  padding 30px 25px
+  font normal 20px 'Baloo'
+  color $main-dark
+  border-radius 4px
+  box-shadow 1px 1px 15px 2px rgba(0, 0, 0, .2);
+  position absolute
+  top 30px
+  right 30px
+  border 2px solid $main-dark
+  background #fff
+  z-index 1
+  display flex
+  align-items center
+  justify-content center
+  position fixed
+  &__status
+    text-transform uppercase
+    margin 0 10px
+  &__message
+    font normal 11px 'Hind'
+    margin 0 10px
+  &__btn
+    outline none
+    border none
+    background #fff
+    position absolute
+    bottom 15px
+    right 30px
+    cursor pointer
+    color inherit
+  i
+    font-size 25px
+  &--success
+    border-color $success
+    color $success
+  &--error
+    border-color $error
+    color $error
+  @media screen and (max-width: 600px)
+    width 100%
+    left 0; right 0; top 0
+    border-radius 0
+    border-top none
+    border-left @border-top
+    border-right @border-top
+
+/***********************************/
 /*         transitions             */
 /***********************************/
-.news-enter
-  opacity 0
-  transform scale(0.2)
-.news-enter-active
-  opacity 1
-  transform scale(1)
-  transition all .3s cubic-bezier(.87,-.41,.19,1.44)
-
 .news-leave
   opacity 1
   transform scale(1)
 .news-leave-active
   opacity 0
   transform scale(0.2)
-  transition all .3s cubic-bezier(.87,-.41,.19,1.44)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  transition all .5s cubic-bezier(.87,-.41,.19,1.44)
 
 

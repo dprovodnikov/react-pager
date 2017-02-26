@@ -12,6 +12,7 @@ class NewsStore extends EventEmitter {
     this.loading = false;
     this.pagesRange = 2;
     this.searchQuery = '';
+    this.status = null;
   }
 
   loadNewsCount() {
@@ -21,7 +22,7 @@ class NewsStore extends EventEmitter {
         this.emit('change');
       })
       .fail(err => {
-        if (err) throw err;
+        if (err) throw err
       })
   }
 
@@ -39,30 +40,27 @@ class NewsStore extends EventEmitter {
     $.post('/news/remove', { _id })
       .done(affected => {
         this.loadNewsCount();
+        this.setStatusSuccess();
       })
       .fail(err => {
         if (err) throw err;
+        this.setStatusError();
       })
   }
 
-  getPagesCount() {
-    return Math.ceil(this.newsCount / this.perPage) || 1;
+  getPagesCount() { return Math.ceil(this.newsCount / this.perPage) || 1 }
+  getCurrentPage() { return this.currentPage }
+  getPagesRange() { return this.pagesRange }
+  getNews() { return this.news }
+  getNewsCount() { return this.newsCount }
+  getStatus() { return this.status }
+
+  setStatusSuccess() {
+    this.status = 'success';
   }
 
-  getCurrentPage() {
-    return this.currentPage;
-  }
-
-  getPagesRange() {
-    return this.pagesRange;
-  }
-
-  getNews() {
-    return this.news;
-  }
-
-  getNewsCount() {
-    return this.newsCount;
+  setStatusError() {
+    this.status = 'error';
   }
 
   changePage(page = 1) {
@@ -77,7 +75,7 @@ class NewsStore extends EventEmitter {
       })
       .fail(err => {
         this.loading = false;
-        if (err) throw err;
+        if (err) throw err
       });
   }
   
