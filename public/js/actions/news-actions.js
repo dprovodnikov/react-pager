@@ -20,3 +20,10 @@ export function deleteNews(_id) {
     _id,
   });
 }
+
+export function addNews(instance) {
+  dispatcher.dispatch({
+    type: 'ADD_NEWS',
+    instance
+  });
+}

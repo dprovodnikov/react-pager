@@ -5,7 +5,7 @@ class Search extends Component {
   
   handleInput() {
     let { value } = this.refs.q;
-    NewsActions.changeSearchQuery(value);
+    NewsActions.changeSearchQuery(value.toLowerCase());
   }
 
   render() {

@@ -12,7 +12,10 @@ class NewsStore extends EventEmitter {
     this.loading = false;
     this.pagesRange = 2;
     this.searchQuery = '';
-    this.status = null;
+    this.status = {
+      status: null,
+      message: null
+    };
   }
 
   loadNewsCount() {
@@ -34,17 +37,18 @@ class NewsStore extends EventEmitter {
   changeSearchQuery(query) {
     this.searchQuery = query;
     this.loadNewsCount();
+    this.resetStatus(); // in order to prevent popup appearance
   }
 
   deleteNews(_id) {
     $.post('/news/remove', { _id })
       .done(affected => {
         this.loadNewsCount();
-        this.setStatusSuccess();
+        this.setStatusSuccess('News were successfuly deleted');
       })
       .fail(err => {
         if (err) throw err;
-        this.setStatusError();
+        this.setStatusError('An error occured while deleting the task');
       })
   }
 
@@ -55,12 +59,22 @@ class NewsStore extends EventEmitter {
   getNewsCount() { return this.newsCount }
   getStatus() { return this.status }
 
-  setStatusSuccess() {
-    this.status = 'success';
+  setStatusSuccess(message) {
+    this.status = {
+      status: 'success',
+      message
+    }
   }
 
-  setStatusError() {
-    this.status = 'error';
+  setStatusError(message) {
+    this.status = {
+      status: 'error',
+      message
+    }
+  }
+
+  resetStatus() {
+    this.status = { status: null, message: null };
   }
 
   changePage(page = 1) {
@@ -78,12 +92,31 @@ class NewsStore extends EventEmitter {
         if (err) throw err
       });
   }
+
+  addNews(instance) {
+    const { title, content } = instance;
+
+    if (!title.trim() || !content.trim()) {
+      return false;
+    }
+
+    $.post('/news/save', { title, content })
+      .done(response => {
+        this.loadNewsCount();
+        this.setStatusSuccess('News were successfuly added');
+      })
+      .fail(err => {
+        this.setStatusError('An error occured while saving the task');
+        throw err;
+      });
+  }
   
   handleActions(action) {
     switch (action.type) {
       case 'PAGE_CHANGE': this.changePage(action.page); break;
       case 'SEARCH_QUERY_CHANGE': this.changeSearchQuery(action.query); break;
       case 'NEWS_DELETE': this.deleteNews(action._id); break;
+      case 'ADD_NEWS': this.addNews(action.instance); break;
     }
   }
 

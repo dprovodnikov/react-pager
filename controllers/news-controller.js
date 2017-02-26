@@ -85,7 +85,7 @@ export function getPage(req, res, next) {
 
   let from = pageNumber * perPage - perPage;
 
-  NewsModel.find(query).skip(+from).limit(+perPage)
+  NewsModel.find(query).sort({ _id: -1 }).skip(+from).limit(+perPage)
     .then(news => {
       return news
         ? res.json({ news })

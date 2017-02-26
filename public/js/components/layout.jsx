@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
 import Search from './search.jsx';
 import Popup from './popup.jsx';
+import AddNews from './add-news.jsx';
 
 class Layout extends Component {
   render() {
-    const transitionOptions = {
-      transitionName: 'popup',
-      transitionEnterTimeout: 200,
-      transitionLeaveTimeout: 200,
-    };
-
     return (
       <div>
+        
+        <AddNews />
+
         <Popup duration="2000"/>
+
         <header className="app-header">
           <div className="app-container">
             <div className="app-header__title">

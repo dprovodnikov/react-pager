@@ -20,17 +20,17 @@ class Popup extends Component {
   }
 
   updateState() {
-    let status = NewsStore.getStatus();
+    let statusObj = NewsStore.getStatus();
 
-    if (!status) return false;
+    if (!statusObj.status) return false;
 
     let state = this.state;
 
-    state.status = status;
+    state.status = statusObj.status;
     state.show = true;
-    state.popup = (status === 'success')
-      ? { icon: 'ion-checkmark-circled', message: 'News were successfully deleted' }
-      : { icon: 'ion-close-circled', message: 'Something went wrong, try again later' }
+    state.popup = (statusObj.status === 'success')
+      ? { icon: 'ion-checkmark-circled', message: statusObj.message }
+      : { icon: 'ion-close-circled', message: statusObj.message }
 
     if (state.timer) {
       clearTimeout(state.timer);
