@@ -68,7 +68,7 @@ class NewsList extends Component {
       : `${news.length} of ${totalNewsCount} on the page`
 
     return (
-      <div>
+      <span>
         <div className="news-list">
           <div className="news-list__title">{titleContent}</div>
           <ReactCSSTransitionGroup {...transitionOptions}>
@@ -76,7 +76,7 @@ class NewsList extends Component {
           </ReactCSSTransitionGroup>
         </div>
         <Pagination currentPage={currentPage} pagesCount={pagesCount} pagesRange={pagesRange}/>
-      </div>
+      </span>
     );
   }
 }
