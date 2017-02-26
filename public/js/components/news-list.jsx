@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import NewsItem from './news-item.jsx';
 import Pagination from './pagination.jsx';
 import NewsStore from '../stores/news-store.js';
@@ -50,15 +51,29 @@ class NewsList extends Component {
   render() {
     const { pagesCount, pagesRange, news } = this.state;
     const { pageNumber:currentPage = NewsStore.getCurrentPage() } = this.props.params;
+    const totalNewsCount = NewsStore.getNewsCount();
 
     const newsList = news.map(newsItem => {
       return <NewsItem key={newsItem._id} item={newsItem} />
     });
 
+    const transitionOptions = {
+      transitionName: 'news',
+      transitionEnterTimeout: 200,
+      transitionLeaveTimeout: 200,
+    }
+
+    const titleContent = (news.length <= 0)
+      ? 'No news for now. Try later'
+      : `${news.length} of ${totalNewsCount} on the page`
+
     return (
       <div>
         <div className="news-list">
-          {newsList}
+          <div className="news-list__title">{titleContent}</div>
+          <ReactCSSTransitionGroup {...transitionOptions}>
+            {newsList}
+          </ReactCSSTransitionGroup>
         </div>
         <Pagination currentPage={currentPage} pagesCount={pagesCount} pagesRange={pagesRange}/>
       </div>

@@ -79,6 +79,12 @@ body
   justify-content center
   align-items center
   flex-direction column
+  &__title
+    font normal 15px 'Baloo' 
+    color $main-dark
+    margin 10px 0
+    @media screen and (max-width: 600px)
+      margin 10px 15px
 .news-item
   width 95%
   flex-shrink 1
@@ -185,6 +191,25 @@ body
     color $main-dark
     text-transform uppercase
     box-shadow 0 0 5px 1px rgba(0, 0, 0, .1); 
+
+/***********************************/
+/*         transitions             */
+/***********************************/
+.news-enter
+  opacity 0
+  transform scale(0.2)
+.news-enter-active
+  opacity 1
+  transform scale(1)
+  transition all .3s cubic-bezier(.87,-.41,.19,1.44)
+
+.news-leave
+  opacity 1
+  transform scale(1)
+.news-leave-active
+  opacity 0
+  transform scale(0.2)
+  transition all .3s cubic-bezier(.87,-.41,.19,1.44)
 
 
 

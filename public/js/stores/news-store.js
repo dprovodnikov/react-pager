@@ -61,6 +61,10 @@ class NewsStore extends EventEmitter {
     return this.news;
   }
 
+  getNewsCount() {
+    return this.newsCount;
+  }
+
   changePage(page = 1) {
     if (this.loading) return false;
 
