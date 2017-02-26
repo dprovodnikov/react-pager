@@ -36,6 +36,10 @@ class Pagination extends Component {
     window.removeEventListener('resize', this.reloadOnBreakpoint.bind(this));
   }
 
+  isMobileVersion() {
+    return document.documentElement.clientWidth < this.state.breakpoint;
+  }
+
   hasPrev(current) {
     return current > 1;
   } 
@@ -64,7 +68,7 @@ class Pagination extends Component {
     let output;
     const { currentPage, pagesCount } = this.props;
 
-    if (document.documentElement.clientWidth <= this.state.breakpoint) {
+    if (this.isMobileVersion()) {
       output = <PageMobile currentPage={currentPage} total={pagesCount}/>
     } else {
       output = range(this.getRangeStart(), this.getRangeEnd()).map(page => {
@@ -90,7 +94,7 @@ class Pagination extends Component {
   }
 
   getFirstPageLink() {
-    return (this.getRangeStart() !== 1)
+    return (this.getRangeStart() !== 1 && !this.isMobileVersion())
       ? <li onClick={this.sendTo.bind(this, 1)}
           className="news-pagination__page news-pagination__first--ellipsis">1
         </li>
@@ -100,7 +104,7 @@ class Pagination extends Component {
   getLastPageLink() {
     const { pagesCount:count } = this.props
 
-    return (this.getRangeEnd() < count)
+    return (this.getRangeEnd() < count && !this.isMobileVersion())
       ? <li onClick={this.sendTo.bind(this, count)}
           className="news-pagination__page news-pagination__last--ellipsis">{count}
         </li>
