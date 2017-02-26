@@ -69,7 +69,9 @@ class Pagination extends Component {
     const { currentPage, pagesCount } = this.props;
 
     if (this.isMobileVersion()) {
-      output = <PageMobile currentPage={currentPage} total={pagesCount}/>
+      if (pagesCount > 1) {
+        output = <PageMobile currentPage={currentPage} total={pagesCount}/>
+      } else null
     } else {
       output = range(this.getRangeStart(), this.getRangeEnd()).map(page => {
         return <Page key={page} page={page} isActive={currentPage == page} />

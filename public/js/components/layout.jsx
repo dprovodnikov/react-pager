@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Search from './search.jsx';
 
 class Layout extends Component {
   render() {
@@ -10,6 +11,7 @@ class Layout extends Component {
             <div className="app-header__title">
              <span className="main-color">ReactJS</span>&nbsp;pager
             </div>
+            <Search />
           </div>
         </header>
 

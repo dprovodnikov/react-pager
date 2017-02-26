@@ -11,10 +11,11 @@ class NewsStore extends EventEmitter {
     this.news = [];
     this.loading = false;
     this.pagesRange = 2;
+    this.searchQuery = '';
   }
 
   loadNewsCount() {
-    $.get('/news/count')
+    $.get(`/news/count?q=${this.searchQuery}`)
       .done(data => {
         this.newsCount = data.count;
         this.emit('change');
@@ -26,11 +27,16 @@ class NewsStore extends EventEmitter {
 
   loadNewsForPage(page) {
     this.loading = true;
-    return $.get(`/news/${page}/${this.perPage}`);
+    return $.get(`/news/${page}/${this.perPage}/?q=${this.searchQuery}`);
+  }
+
+  setSearchQuery(query) {
+    this.searchQuery = query;
+    this.loadNewsCount();
   }
 
   getPagesCount() {
-    return Math.ceil(this.newsCount / this.perPage);
+    return Math.ceil(this.newsCount / this.perPage) || 1;
   }
 
   getCurrentPage() {

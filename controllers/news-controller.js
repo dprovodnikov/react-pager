@@ -70,6 +70,7 @@ export function update(req, res, next) {
 // get page by page number
 export function getPage(req, res, next) {
   const { pageNumber, perPage } = req.params;
+  const { q } = req.query;
 
   if (pageNumber <= 0 || perPage <= 0) {
     return next({
@@ -78,9 +79,13 @@ export function getPage(req, res, next) {
     })
   }
 
+  const query = q
+    ? { title: new RegExp(q) }
+    : null
+
   let from = pageNumber * perPage - perPage;
 
-  NewsModel.find().skip(+from).limit(+perPage)
+  NewsModel.find(query).skip(+from).limit(+perPage)
     .then(news => {
       return news
         ? res.json({ news })
@@ -91,7 +96,13 @@ export function getPage(req, res, next) {
 
 // get pages count
 export function getNewsCount(req, res, next) {
-  NewsModel.count()
+  const { q } = req.query;
+
+  const query = q
+   ? { title: new RegExp(q) }
+   : null
+
+  NewsModel.count(query)
     .then(count => res.json({ count }))
     .catch(next);
 }
