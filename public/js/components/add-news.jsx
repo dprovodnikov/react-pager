@@ -8,6 +8,7 @@ class AddNews extends Component {
 
     this.state = {
       show: false,
+      title: 'Add new task',
       instance: {},
     }
   }
@@ -28,6 +29,7 @@ class AddNews extends Component {
     const { instance } = editingInfo;
 
     this.state.show = true;
+    this.state.title = 'Update task'
     this.state.instance = instance;
     this.setState(this.state);
   }
@@ -50,6 +52,7 @@ class AddNews extends Component {
     }
 
     this.state.instance = {};
+    this.state.title = 'Add new task';
     this.state.show = false;
     this.setState(this.state);
   }
@@ -62,6 +65,7 @@ class AddNews extends Component {
   hideForm() {
     this.state.show = false;
     this.state.instance = {};
+    this.state.title = 'Add new task';
     this.setState(this.state);
   }
 
@@ -72,7 +76,7 @@ class AddNews extends Component {
       ? <div>
           <div className="overlay" onClick={this.hideForm.bind(this)}></div>
           <form className="add-news">
-            <h2 className="add-news__heading">Add a new task</h2>
+            <h2 className="add-news__heading">{this.state.title}</h2>
             <input type="hidden" ref="id" defaultValue={_id}/>
             <input className="add-news__title" ref="title" placeholder="Title" defaultValue={title}/>
             <textarea className="add-news__content" ref="content" placeholder="Content" defaultValue={content}></textarea>

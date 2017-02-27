@@ -2,10 +2,12 @@ import express from 'express';
 import config from './config';
 import { join } from 'path';
 import errorHandler from './middlewares/error-handler';
+import checkToken from './middlewares/check-token';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 
 import newsRouter from './routes/news-routes';
+import userRouter from './routes/user-routes';
 
 const app = express();
 
@@ -20,7 +22,10 @@ app.use(express.static(join(__dirname, '/public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// app.use(checkToken);
+
 app.use('/news', newsRouter);
+app.use('/user', userRouter);
 
 app.listen(config.port, err => {
   if (err) throw err;
