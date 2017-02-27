@@ -17,7 +17,7 @@ class Popup extends Component {
   }
 
   componentWillUnmount() {
-    NewsStore.removeEventListener('change', this.updateState.bind(this));
+    NewsStore.removeListener('change', this.updateState.bind(this));
   }
 
   updateState() {

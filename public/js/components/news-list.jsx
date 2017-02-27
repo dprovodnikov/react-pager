@@ -3,9 +3,8 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import NewsItem from './news-item.jsx';
 import Pagination from './pagination.jsx';
 import NewsStore from '../stores/news-store.js';
-import $ from 'jquery';
-
 import { hashHistory } from 'react-router';
+import $ from 'jquery';
 
 class NewsList extends Component {
 
@@ -36,7 +35,7 @@ class NewsList extends Component {
     const pagesCount = NewsStore.getPagesCount();
 
     if (pageNumber > pagesCount) {
-      return hashHistory.push(`/${pagesCount}`);
+      return hashHistory.push(`/app/${pagesCount}`);
     }
 
     this.setState({

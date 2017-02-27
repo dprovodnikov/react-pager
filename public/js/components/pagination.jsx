@@ -50,18 +50,18 @@ class Pagination extends Component {
 
   increasePage(current) {
     if (this.hasNext(current)) {
-      hashHistory.push(`/${+current + 1}`);
+      hashHistory.push(`/app/${+current + 1}`);
     }
   }
 
   decreasePage(current) {
     if (this.hasPrev(current)) {
-      hashHistory.push(`/${+current - 1}`);
+      hashHistory.push(`/app/${+current - 1}`);
     }
   }
 
   sendTo(page) {
-    hashHistory.push(`/${page}`);
+    hashHistory.push(`/app/${page}`);
   }
 
   getPages() {

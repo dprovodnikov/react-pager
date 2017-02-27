@@ -144,6 +144,7 @@ class NewsStore extends EventEmitter {
       case 'NEWS_DELETE': this.deleteNews(action._id); break;
       case 'ADD_NEWS': this.addNews(action.instance); break;
       case 'EDIT_NEWS_REQUEST': this.initEditing(action.instance); break;
+      case 'EDITING_COMPLETE': this.completeEditing(); break;
       case 'UPDATE_NEWS': this.updateNews(action.instance); break;
       case 'POPUP_CLOSE': this.resetStatus(); break;
     }

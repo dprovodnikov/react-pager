@@ -4,7 +4,7 @@ import { hashHistory } from 'react-router';
 class Page extends Component {
 
   handlePageChange(page) {
-    hashHistory.push(`/${page}`)
+    hashHistory.push(`/app/${page}`)
   }
 
   render() {

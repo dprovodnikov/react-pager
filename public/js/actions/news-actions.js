@@ -11,7 +11,7 @@ export function changeSearchQuery(query) {
   dispatcher.dispatch({
     type: 'SEARCH_QUERY_CHANGE',
     query,
-  })
+  });
 }
 
 export function deleteNews(_id) {
@@ -32,17 +32,21 @@ export function editNewsRequest(instance) {
   dispatcher.dispatch({
     type: 'EDIT_NEWS_REQUEST',
     instance
-  })
+  });
+}
+
+export function completeEditing() {
+  dispatcher.dispatch({ type: 'EDITING_COMPLETE' });
 }
 
 export function updateNews(instance) {
   dispatcher.dispatch({
     type: 'UPDATE_NEWS',
     instance
-  })
+  });
 }
 
 export function hidePopup() {
-  dispatcher.dispatch({ type: 'POPUP_CLOSE' })
+  dispatcher.dispatch({ type: 'POPUP_CLOSE' });
 }
 

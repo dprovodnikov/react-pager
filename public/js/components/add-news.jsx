@@ -18,7 +18,7 @@ class AddNews extends Component {
   }
 
   componentWillUnmount() {
-    NewsStore.removeEventListener('change', this.updateState.bind(this));
+    NewsStore.removeListener('change', this.updateState.bind(this));
   }
 
   updateState() {
@@ -55,6 +55,8 @@ class AddNews extends Component {
     this.state.title = 'Add new task';
     this.state.show = false;
     this.setState(this.state);
+
+    NewsActions.completeEditing();
   }
 
   showForm() {
@@ -67,6 +69,8 @@ class AddNews extends Component {
     this.state.instance = {};
     this.state.title = 'Add new task';
     this.setState(this.state);
+
+    NewsActions.completeEditing();
   }
 
   renderForm() {
