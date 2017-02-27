@@ -106,14 +106,18 @@ body
     i
       font-size 17px
       color #aaa
+      margin 0 2.5px
       cursor pointer
       transition color .1s
+      &:last-of-type
+        margin-right 0
       &:hover
         color #3d3d3d
         
   &__title
     font normal 16px 'Baloo'
     color $main-dark
+    max-width 80%
   &__content
     font normal 14px 'Hind'
     color $main-dark

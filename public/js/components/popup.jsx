@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import NewsStore from '../stores/news-store.js';
+import * as NewsActions from '../actions/news-actions.js';
 
 class Popup extends Component {
   constructor(props) {
@@ -39,6 +40,8 @@ class Popup extends Component {
     state.timer = setTimeout(() => {
       state.show = false;
       this.setState(state);
+
+      NewsActions.hidePopup();
     }, this.props.duration || 3000);
 
     this.setState(state);

@@ -16,6 +16,7 @@ class NewsStore extends EventEmitter {
       status: null,
       message: null
     };
+    this.editing = {}
   }
 
   loadNewsCount() {
@@ -37,7 +38,6 @@ class NewsStore extends EventEmitter {
   changeSearchQuery(query) {
     this.searchQuery = query;
     this.loadNewsCount();
-    this.resetStatus(); // in order to prevent popup appearance
   }
 
   deleteNews(_id) {
@@ -59,18 +59,27 @@ class NewsStore extends EventEmitter {
   getNewsCount() { return this.newsCount }
   getStatus() { return this.status }
 
+  isEditing() {
+    return this.editing.status
+      ? this.editing
+      : false
+  }
+
+  completeEditing() {
+    this.editing = {}
+  }
+
+  initEditing(instance) {
+    this.editing = { status: true, instance }
+    this.emit('change');
+  }
+
   setStatusSuccess(message) {
-    this.status = {
-      status: 'success',
-      message
-    }
+    this.status = { status: 'success', message }
   }
 
   setStatusError(message) {
-    this.status = {
-      status: 'error',
-      message
-    }
+    this.status = { status: 'error', message }
   }
 
   resetStatus() {
@@ -110,6 +119,23 @@ class NewsStore extends EventEmitter {
         throw err;
       });
   }
+
+
+  updateNews(instance) {
+    const { _id, title, content } = instance;
+
+    $.post('/news/update', { _id, title, content })
+      .done(response => {
+        this.loadNewsCount();
+        this.setStatusSuccess('The task were updated successfuly');
+      })
+      .fail(err => {
+        this.setStatusError('An error occured while updating the task');
+        throw err;
+      })
+
+    this.completeEditing();
+  }
   
   handleActions(action) {
     switch (action.type) {
@@ -117,6 +143,9 @@ class NewsStore extends EventEmitter {
       case 'SEARCH_QUERY_CHANGE': this.changeSearchQuery(action.query); break;
       case 'NEWS_DELETE': this.deleteNews(action._id); break;
       case 'ADD_NEWS': this.addNews(action.instance); break;
+      case 'EDIT_NEWS_REQUEST': this.initEditing(action.instance); break;
+      case 'UPDATE_NEWS': this.updateNews(action.instance); break;
+      case 'POPUP_CLOSE': this.resetStatus(); break;
     }
   }
 

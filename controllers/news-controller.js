@@ -49,7 +49,7 @@ export function remove(req, res, next) {
 
 // update an instance
 export function update(req, res, next) {
-  const { id:_id, title = '', content = '' } = req.body;
+  const { _id, title = '', content = '' } = req.body;
 
   if (!title.trim() || !content.trim() || !_id) {
     return next({

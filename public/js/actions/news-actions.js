@@ -27,3 +27,22 @@ export function addNews(instance) {
     instance
   });
 }
+
+export function editNewsRequest(instance) {
+  dispatcher.dispatch({
+    type: 'EDIT_NEWS_REQUEST',
+    instance
+  })
+}
+
+export function updateNews(instance) {
+  dispatcher.dispatch({
+    type: 'UPDATE_NEWS',
+    instance
+  })
+}
+
+export function hidePopup() {
+  dispatcher.dispatch({ type: 'POPUP_CLOSE' })
+}
+
