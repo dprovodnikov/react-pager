@@ -54,7 +54,7 @@ export function signIn(req, res, next) {
     })
     .then(() => {
       if (_user) {
-        const token = jwt.sign({ _id: _user._id }, config.secret);
+        const token = jwt.sign({ _id: _user._id }, config.secret, { expiresIn: '1 day' });
         res.json({
           isAdmin: _user.isAdmin,
           _id: _user._id,
