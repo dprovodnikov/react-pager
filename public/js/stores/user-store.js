@@ -6,6 +6,19 @@ import types from '../actions/types';
 class UserStore extends EventEmitter {
   constructor() {
     super();
+
+    this.user ={
+      _id: null,
+      isAdmin: false,
+    }
+  }
+
+  isAdmin() {
+    return this.user.isAdmin;
+  }
+
+  getUser() {
+    return this.user;
   }
 
   register({ username = '', password = '' }) {
@@ -31,13 +44,32 @@ class UserStore extends EventEmitter {
     $.post('/user/signin', { username, password })
       .done(response => {
         localStorage.setItem('jwt-token', response.token);
+
         // show popup or something
+        
+        this.user = {
+          isAdmin: response.isAdmin,
+          _id: response._id
+        }
+
         this.emit('change');
       })
       .fail(err => {
         if (err) throw err;
       })
   } 
+
+  loadUser() {
+    $.post('/user/bytoken/', { token: localStorage.getItem('jwt-token') })
+      .done(res => {
+        this.user.isAdmin = res.isAdmin;
+        this.user._id = res._id;
+        this.emit('change');
+      })
+      .fail(err => {
+        if (err) throw err;
+      })
+  }
 
   logout() {
     localStorage.removeItem('jwt-token');
@@ -52,6 +84,7 @@ class UserStore extends EventEmitter {
       case types.REGISTER_USER: this.register(action.credentials); break;
       case types.AUTHORIZE_USER: this.authorize(action.credentials); break;
       case types.LOGOUT: this.logout(); break;
+      case types.LOAD_USER: this.loadUser(); break;
     }
   }
 

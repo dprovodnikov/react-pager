@@ -1,6 +1,10 @@
 import dispatcher from '../dispatcher';
 import types from '../actions/types';
 
+export function loadUser() {
+  dispatcher.dispatch({ type: types.LOAD_USER });
+}
+
 export function registrate(credentials) {
   dispatcher.dispatch({
     type: types.REGISTER_USER,

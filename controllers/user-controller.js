@@ -38,7 +38,7 @@ export function signIn(req, res, next) {
     })
   }
 
-  let _id;
+  let _user;
 
   UserModel.findOne({ username })
     .then(user => {
@@ -48,14 +48,18 @@ export function signIn(req, res, next) {
           message: 'User not found'
         })
       } else {
-        _id = user._id;
+        _user = user;
         return user.checkPassword(password)
       }
     })
     .then(() => {
-      if (_id) {
-        const token = jwt.sign({ _id }, config.secret);
-        res.json({ token });
+      if (_user) {
+        const token = jwt.sign({ _id: _user._id }, config.secret);
+        res.json({
+          isAdmin: _user.isAdmin,
+          _id: _user._id,
+          token,
+        });
       }
     })
     .catch(err => {
@@ -68,4 +72,43 @@ export function signIn(req, res, next) {
         next(err);
       }
     })
+}
+
+export function getUserByToken(req, res, next) {
+  const { token } = req.body;
+
+  if (!token) {
+    return next({
+      status: 400,
+      message: 'Invalid token',
+    })
+  }
+  
+  try {
+    var tokenObj = jwt.verify(token, config.secret);
+  } catch ({ message }) {
+    return next({
+      status: 400,
+      message
+    })
+  }
+
+  const { _id } = tokenObj;
+
+  UserModel.findOne({ _id })
+    .then(user => {
+      if (!user) {
+        next({
+          status: 400,
+          message: 'User not found'
+        })
+      } else {
+        res.json({
+          _id: user._id,
+          isAdmin: user.isAdmin
+        })
+      }
+    })
+
+
 }

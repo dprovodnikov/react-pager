@@ -11,19 +11,40 @@ import Styles from '../stylus/index.styl'
 
 const target = document.getElementById('app-root');
 
-function isAuthorized() {
+function isAuthorized(nextState, replace, cb) {
   const isAuth = UserStore.isAuthorized();
-  hashHistory.push(isAuth ? '/app' : '/login')
+
+  if (!isAuth) {
+    replace({
+      pathname: '/login',
+      state: {nextPathname: nextState.location.pathname}
+    });
+  }
+
+  cb();
+}
+
+function isLoggedOut(nextState, replace, cb) {
+  const isAuth = UserStore.isAuthorized();
+
+  if (isAuth) {
+    replace({
+      pathname: '/app',
+      state: {nextPathname: nextState.location.pathname}
+    });
+  }
+
+  cb();
 }
 
 render(
   <Router history={hashHistory}>
-    <Route path="/" onEnter={isAuthorized()} component={Layout}>
+    <Route path="/" component={Layout}>
       <IndexRoute component={AuthForm}></IndexRoute>
-      <Route onEnter={isAuthorized()} path="login" component={AuthForm}></Route>
-      <Route path="app" component={App}>
+      <Route path="login" onEnter={isLoggedOut} component={AuthForm}></Route>
+      <Route path="app" onEnter={isAuthorized} component={App}>
         <IndexRoute component={NewsList}></IndexRoute>
-        <Route onEnter={isAuthorized()} path=":pageNumber" component={NewsList} />
+        <Route path=":pageNumber" component={NewsList} />
       </Route>
     </Route>
   </Router>
