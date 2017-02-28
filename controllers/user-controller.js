@@ -1,4 +1,5 @@
 import UserModel from '../models/user';
+import bcrypt from 'bcrypt-as-promised';
 import jwt from 'jsonwebtoken';
 import config from '../config';
 
@@ -36,6 +37,8 @@ export function signIn(req, res, next) {
     })
   }
 
+  let _id;
+
   UserModel.findOne({ username })
     .then(user => {
 
@@ -46,17 +49,22 @@ export function signIn(req, res, next) {
         })
       }
 
-      if (user.checkPassword(password)) {
-        const token = jwt.sign({ _id: user._id }, config.secret);
-
-        res.json({ token });
-      } else {
-        return next({
+      _id = user._id;
+      
+      return user.checkPassword(password)
+    })
+    .then(() => {
+      const token = jwt.sign({ _id }, config.secret);
+      res.json({ token });
+    })
+    .catch(err => {
+      if (err instanceof bcrypt.MISMATCH_ERROR) {
+        next({
           status: 400,
           message: 'Bad credentials'
         })
+      } else {
+        next(err);
       }
-
     })
-    .catch(next)
 }
