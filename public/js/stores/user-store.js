@@ -21,17 +21,18 @@ class UserStore extends EventEmitter {
     return this.user;
   }
 
-  register({ username = '', password = '' }) {
+  register({ username = '', password = '', isAdmin = false }) {
     if (!username.trim() || !password.trim()) {
       return false;
     }
 
-    $.post('/user/signup', { username, password })
-      .done(user => {
-        // show popup or something
+    $.post('/user/signup', { username, password, isAdmin })
+      .done(res => {
+        alert(`Registration complete ${ res.isAdmin ? 'You have admin rights. ' : ''}`);
         console.log('done');
       })
       .fail(err => {
+        alert('something went wrong')
         if (err) throw err;
       });
   }

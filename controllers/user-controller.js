@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import config from '../config';
 
 export function signUp(req, res, next) {
-  const { username = '', password = '' } = req.body;
+  const { username = '', password = '', isAdmin = false } = req.body;
 
   if (!username.trim() || !password.trim()) {
     return next({
@@ -13,11 +13,11 @@ export function signUp(req, res, next) {
     })
   }
 
-  UserModel.create({ username, password })
+  UserModel.create({ username, password, isAdmin })
     .then(user => {
       return res
         .status(201)
-        .json({ user: user.username });
+        .json({ user: user.username, isAdmin, });
     })
     .catch(({ message }) => {
       next({

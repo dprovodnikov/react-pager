@@ -31,12 +31,16 @@ class AuthForm extends Component {
 
   execute() {
     let [ username, password ] = [
-      this.refs.username.value,
-      this.refs.password.value
+      this.refs.username.value.trim(),
+      this.refs.password.value.trim(),
     ]
-    
-    if (this.state.regisrtation) {
-      UserActions.registrate({ username, password });
+
+    if (this.refs.isAdmin) {
+      var isAdmin = this.refs.isAdmin.checked;
+    }
+
+    if (this.state.registration) {
+      UserActions.registrate({ username, password, isAdmin });
     } else {
       UserActions.authorizate({ username, password });
     }
@@ -46,17 +50,17 @@ class AuthForm extends Component {
   }
 
   changeMode() {
-    this.state.regisrtation = !this.state.regisrtation;
+    this.state.registration = !this.state.registration;
     this.setState(this.state);
   }
 
   render() {
 
-    const linkMessage = (this.state.regisrtation)
+    const linkMessage = (this.state.registration)
       ? 'Already have an account?'
       : 'Don\'t have an account?'
 
-    const titleMessage = (this.state.regisrtation)
+    const titleMessage = (this.state.registration)
       ? 'registration'
       : 'authorization'
 
@@ -66,6 +70,14 @@ class AuthForm extends Component {
         <input type="text" className="auth-form__input" ref="username" placeholder="Username"/>
         <input type="password" className="auth-form__input" ref="password" placeholder="Password"/>
         <button className="auth-form__btn" onClick={this.execute.bind(this)}>Done</button>
+        {
+          this.state.registration
+          ? <label className="auth-form__checkbox">
+              <input type="checkbox" ref="isAdmin"/>
+              Admin
+            </label>
+          : null
+        }
         <a href="#" className="auth-form__link" onClick={this.changeMode.bind(this)}>{linkMessage}</a>
       </form>
     );
