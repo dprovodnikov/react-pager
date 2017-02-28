@@ -41,21 +41,21 @@ export function signIn(req, res, next) {
 
   UserModel.findOne({ username })
     .then(user => {
-
       if (!user) {
-        return next({
+        next({
           status: 400,
           message: 'User not found'
         })
+      } else {
+        _id = user._id;
+        return user.checkPassword(password)
       }
-
-      _id = user._id;
-      
-      return user.checkPassword(password)
     })
     .then(() => {
-      const token = jwt.sign({ _id }, config.secret);
-      res.json({ token });
+      if (_id) {
+        const token = jwt.sign({ _id }, config.secret);
+        res.json({ token });
+      }
     })
     .catch(err => {
       if (err instanceof bcrypt.MISMATCH_ERROR) {
