@@ -2,6 +2,7 @@ import { EventEmitter } from 'events';
 import dispatcher from '../dispatcher';
 import $ from 'jquery'
 import { hashHistory } from 'react-router';
+import types from './actions/types';
 
 class UserStore extends EventEmitter {
   constructor() {
@@ -51,9 +52,9 @@ class UserStore extends EventEmitter {
 
   handleActions(action) {
     switch (action.type) {
-      case 'REGISTER_USER': this.register(action.credentials); break;
-      case 'AUTHORIZE_USER': this.authorize(action.credentials); break;
-      case 'LOGOUT': this.logout(); break;
+      case types.REGISTER_USER: this.register(action.credentials); break;
+      case types.AUTHORIZE_USER: this.authorize(action.credentials); break;
+      case types.LOGOUT: this.logout(); break;
     }
   }
 

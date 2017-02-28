@@ -1,52 +1,53 @@
 import dispatcher from '../dispatcher';
+import types from '../actions/types';
 
 export function changePage(page) {
   dispatcher.dispatch({
-    type: 'PAGE_CHANGE',
+    type: types.PAGE_CHANGE,
     page,
   })
 }
 
 export function changeSearchQuery(query) {
   dispatcher.dispatch({
-    type: 'SEARCH_QUERY_CHANGE',
+    type: types.SEARCH_QUERY_CHANGE,
     query,
   });
 }
 
 export function deleteNews(_id) {
   dispatcher.dispatch({
-    type: 'NEWS_DELETE',
+    type: types.NEWS_DELETE,
     _id,
   });
 }
 
 export function addNews(instance) {
   dispatcher.dispatch({
-    type: 'ADD_NEWS',
+    type: types.ADD_NEWS,
     instance
   });
 }
 
 export function editNewsRequest(instance) {
   dispatcher.dispatch({
-    type: 'EDIT_NEWS_REQUEST',
+    type: types.EDIT_NEWS_REQUEST,
     instance
   });
 }
 
 export function completeEditing() {
-  dispatcher.dispatch({ type: 'EDITING_COMPLETE' });
+  dispatcher.dispatch({ type: types.EDITING_COMPLETE });
 }
 
 export function updateNews(instance) {
   dispatcher.dispatch({
-    type: 'UPDATE_NEWS',
+    type: types.UPDATE_NEWS,
     instance
   });
 }
 
 export function hidePopup() {
-  dispatcher.dispatch({ type: 'POPUP_CLOSE' });
+  dispatcher.dispatch({ type: types.POPUP_CLOSE });
 }
 

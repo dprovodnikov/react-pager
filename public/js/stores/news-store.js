@@ -139,14 +139,14 @@ class NewsStore extends EventEmitter {
   
   handleActions(action) {
     switch (action.type) {
-      case 'PAGE_CHANGE': this.changePage(action.page); break;
-      case 'SEARCH_QUERY_CHANGE': this.changeSearchQuery(action.query); break;
-      case 'NEWS_DELETE': this.deleteNews(action._id); break;
-      case 'ADD_NEWS': this.addNews(action.instance); break;
-      case 'EDIT_NEWS_REQUEST': this.initEditing(action.instance); break;
-      case 'EDITING_COMPLETE': this.completeEditing(); break;
-      case 'UPDATE_NEWS': this.updateNews(action.instance); break;
-      case 'POPUP_CLOSE': this.resetStatus(); break;
+      case types.PAGE_CHANGE: this.changePage(action.page); break;
+      case types.SEARCH_QUERY_CHANGE: this.changeSearchQuery(action.query); break;
+      case types.NEWS_DELETE: this.deleteNews(action._id); break;
+      case types.ADD_NEWS: this.addNews(action.instance); break;
+      case types.EDIT_NEWS_REQUEST: this.initEditing(action.instance); break;
+      case types.EDITING_COMPLETE: this.completeEditing(); break;
+      case types.UPDATE_NEWS: this.updateNews(action.instance); break;
+      case types.POPUP_CLOSE: this.resetStatus(); break;
     }
   }
 
