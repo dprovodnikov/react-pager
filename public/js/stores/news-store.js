@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
 import dispatcher from '../dispatcher';
+import types from '../actions/types';
 import $ from 'jquery'
 
 class NewsStore extends EventEmitter {
@@ -20,7 +21,13 @@ class NewsStore extends EventEmitter {
   }
 
   loadNewsCount() {
-    $.get(`/news/count?q=${this.searchQuery}`)
+    $.ajax({
+      url: `/news/count?q=${this.searchQuery}`,
+      method: 'GET',
+      headers: {
+        'Authorization': localStorage.getItem('jwt-token')
+      }
+    })
       .done(data => {
         this.newsCount = data.count;
         this.emit('change');
@@ -32,7 +39,13 @@ class NewsStore extends EventEmitter {
 
   loadNewsForPage(page) {
     this.loading = true;
-    return $.get(`/news/${page}/${this.perPage}/?q=${this.searchQuery}`);
+    return $.ajax({
+      url: `/news/${page}/${this.perPage}/?q=${this.searchQuery}`,
+      method: 'GET',
+      headers: {
+        'Authorization': localStorage.getItem('jwt-token')
+      }
+    })
   }
 
   changeSearchQuery(query) {
@@ -41,7 +54,14 @@ class NewsStore extends EventEmitter {
   }
 
   deleteNews(_id) {
-    $.post('/news/remove', { _id })
+    $.ajax({
+      url: '/news/remove',
+      method: 'POST',
+      data: { _id },
+      headers: {
+        'Authorization': localStorage.getItem('jwt-token')
+      }
+    })
       .done(affected => {
         this.loadNewsCount();
         this.setStatusSuccess('News were successfuly deleted');
@@ -109,7 +129,14 @@ class NewsStore extends EventEmitter {
       return false;
     }
 
-    $.post('/news/save', { title, content })
+    $.ajax({
+      url: '/news/save',
+      method: 'POST',
+      data: { title, content },
+      headers: {
+        'Authorization': localStorage.getItem('jwt-token')
+      }
+    })
       .done(response => {
         this.loadNewsCount();
         this.setStatusSuccess('News were successfuly added');
@@ -124,7 +151,14 @@ class NewsStore extends EventEmitter {
   updateNews(instance) {
     const { _id, title, content } = instance;
 
-    $.post('/news/update', { _id, title, content })
+    $.ajax({
+      url: '/news/update',
+      method: 'POST',
+      data: { _id, title, content },
+      headers: {
+        'Authorization': localStorage.getItem('jwt-token')
+      }
+    })
       .done(response => {
         this.loadNewsCount();
         this.setStatusSuccess('The task were updated successfuly');
@@ -147,6 +181,7 @@ class NewsStore extends EventEmitter {
       case types.EDITING_COMPLETE: this.completeEditing(); break;
       case types.UPDATE_NEWS: this.updateNews(action.instance); break;
       case types.POPUP_CLOSE: this.resetStatus(); break;
+      case types.LOGOUT: this.changeSearchQuery(''); break;
     }
   }
 

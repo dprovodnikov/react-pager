@@ -17,13 +17,15 @@ class AuthForm extends Component {
   }
 
   componentWillUnmount() {
-    UserStore.removeListener('change', this.updateState.bind(this));
+    UserStore.removeListener('change', this.updateState);
   }
 
   updateState() {
     const isAuthorized = UserStore.isAuthorized();
     if (isAuthorized) {
       hashHistory.push('/app');
+    } else {
+      hashHistory.push('/login');
     }
   }
 

@@ -31,6 +31,7 @@ export function signIn(req, res, next) {
   const { username = '', password = '' } = req.body;
 
   if (!username.trim() || !password.trim()) {
+    console.log('point 1')
     return next({
       status: 400,
       message: 'Bad credentials'

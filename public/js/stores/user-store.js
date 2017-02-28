@@ -1,8 +1,7 @@
 import { EventEmitter } from 'events';
 import dispatcher from '../dispatcher';
 import $ from 'jquery'
-import { hashHistory } from 'react-router';
-import types from './actions/types';
+import types from '../actions/types';
 
 class UserStore extends EventEmitter {
   constructor() {
@@ -42,8 +41,6 @@ class UserStore extends EventEmitter {
 
   logout() {
     localStorage.removeItem('jwt-token');
-    hashHistory.push('/login');
-    // this.emit('change');
   }
 
   isAuthorized() {

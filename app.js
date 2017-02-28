@@ -22,10 +22,10 @@ app.use(express.static(join(__dirname, '/public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// app.use(checkToken);
 
-app.use('/news', newsRouter);
 app.use('/user', userRouter);
+app.use('/news', checkToken);
+app.use('/news', newsRouter);
 
 app.listen(config.port, err => {
   if (err) throw err;
