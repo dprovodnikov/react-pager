@@ -29,6 +29,15 @@ You can search through the news. The search is dynamic.
 
 ![notifications](https://img-fotki.yandex.ru/get/197756/68361812.0/0_162fe8_2b2a16ea_orig)
 
+## Installation
+Just clone the repository and use npm to install dependencies.
+You need mongodb installed in order to be able to run the application.
+For test data to generate just use following command:
+
+```bash
+$ npm run generate-test-data
+```
+It will generate you about 100 news items to work with.
 
 ## Technoligies
 Node.js (Express.js)
