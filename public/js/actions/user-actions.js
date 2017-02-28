@@ -13,3 +13,7 @@ export function authorizate(credentials) {
     credentials,
   })
 }
+
+export function logout() {
+  dispatcher.dispatch({ type: 'LOGOUT' })
+}

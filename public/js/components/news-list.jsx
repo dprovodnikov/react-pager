@@ -27,7 +27,7 @@ class NewsList extends Component {
   }
 
   componentWillUnmount() {
-    NewsStore.removeListener('change', this.updateState.bind(this));
+    NewsStore.removeAllListeners('change');
   }
 
   updateState() {

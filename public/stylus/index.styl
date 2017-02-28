@@ -65,8 +65,24 @@ body
       left 0
       font-size 20px
       color #aaa
+  &__btn
+    height 40px
+    border none
+    outline none
+    transition all .2s
+    cursor pointer
+    top 50%
+    transform translateY(50%)
+    font normal 14px 'Hind'
+    padding 2px 10px
+    background white
+    color $main-red
+    &:hover
+      text-decoration underline
     @media screen and (max-width: 840px)
       margin 0 15px
+    i
+      font-size 23px
 
 
 /***********************************/
@@ -363,6 +379,11 @@ body
   align-items center
   border 1px solid #ccc
   border-radius 3px
+  @media screen and (max-width: 600px)
+    width 100vw
+    height 100vh
+    top 0; left 0
+    transform none
   &__title
     font normal 20px 'Hind'
     color $main-red
@@ -375,6 +396,7 @@ body
     border 1px solid #ccc
     width 250px
     margin 7px 0
+    min-height 40px
   &__btn
     outline none
     padding 6px 10px
@@ -386,6 +408,11 @@ body
     width 250px
     border none
     margin 7px
+    cursor pointer
+    transition all .2s
+    min-height 40px
+    &:hover
+      background darken($main-red, 10%)
   &__link
     color $main-red
     text-decoration none

@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
 import dispatcher from '../dispatcher';
 import $ from 'jquery'
+import { hashHistory } from 'react-router';
 
 class UserStore extends EventEmitter {
   constructor() {
@@ -19,7 +20,7 @@ class UserStore extends EventEmitter {
       })
       .fail(err => {
         if (err) throw err;
-      })
+      });
   }
 
   authorize({ username = '', password = '' }) {
@@ -32,12 +33,17 @@ class UserStore extends EventEmitter {
         localStorage.setItem('jwt-token', response.token);
         // show popup or something
         this.emit('change');
-        console.log('done');
       })
       .fail(err => {
         if (err) throw err;
       })
   } 
+
+  logout() {
+    localStorage.removeItem('jwt-token');
+    hashHistory.push('/login');
+    // this.emit('change');
+  }
 
   isAuthorized() {
     return localStorage.getItem('jwt-token') ? true : false
@@ -47,6 +53,7 @@ class UserStore extends EventEmitter {
     switch (action.type) {
       case 'REGISTER_USER': this.register(action.credentials); break;
       case 'AUTHORIZE_USER': this.authorize(action.credentials); break;
+      case 'LOGOUT': this.logout(); break;
     }
   }
 

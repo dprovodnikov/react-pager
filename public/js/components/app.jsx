@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Search from './search.jsx';
 import Popup from './popup.jsx';
 import AddNews from './add-news.jsx';
+import * as UserActions from '../actions/user-actions.js';
 
 class Layout extends Component {
   render() {
@@ -18,6 +19,9 @@ class Layout extends Component {
              <span className="main-color">ReactJS</span>&nbsp;pager
             </div>
             <Search />
+            <button className="app-header__btn" onClick={UserActions.logout}>
+              <i className="ion-log-out"></i>
+            </button>
           </div>
         </header>
 
