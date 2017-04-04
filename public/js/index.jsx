@@ -1,51 +1,20 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { Router, Route, hashHistory, IndexRoute } from 'react-router';
-import App from './components/app.jsx';
-import NewsList from './components/news-list.jsx';
-import AuthForm from './components/auth-form.jsx';
-import Layout from './components/layout.jsx';
-import UserStore from './stores/user-store.js';
+import { Router, browserHistory } from 'react-router';
+import routes from './routes.jsx';
+import promiseMiddleware from 'redux-promise';
+import reducers from './reducers';
 
-import Styles from '../stylus/index.styl'
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
 
-const target = document.getElementById('app-root');
+import '../stylus/index.styl'
 
-function isAuthorized(nextState, replace, cb) {
-  const isAuth = UserStore.isAuthorized();
-
-  if (!isAuth) {
-    replace({
-      pathname: '/login',
-      state: {nextPathname: nextState.location.pathname}
-    });
-  }
-
-  cb();
-}
-
-function isLoggedOut(nextState, replace, cb) {
-  const isAuth = UserStore.isAuthorized();
-
-  if (isAuth) {
-    replace({
-      pathname: '/app',
-      state: {nextPathname: nextState.location.pathname}
-    });
-  }
-
-  cb();
-}
+const createStoreWithMiddleware = applyMiddleware(promiseMiddleware)(createStore);
 
 render(
-  <Router history={hashHistory}>
-    <Route path="/" component={Layout}>
-      <IndexRoute component={AuthForm}></IndexRoute>
-      <Route path="login" onEnter={isLoggedOut} component={AuthForm}></Route>
-      <Route path="app" onEnter={isAuthorized} component={App}>
-        <IndexRoute component={NewsList}></IndexRoute>
-        <Route path=":pageNumber" component={NewsList} />
-      </Route>
-    </Route>
-  </Router>
-, target);
+  <Provider store={createStoreWithMiddleware(reducers)}>
+    <Router history={browserHistory} routes={routes} />
+  </Provider>,
+  document.getElementById('app-root')
+);

@@ -1,25 +1,18 @@
 import React, { Component } from 'react';
-import { hashHistory } from 'react-router';
 
-class Page extends Component {
+const Page = (props) => {
+  const { page, isActive } = props;
+  let className = 'news-pagination__page ';
 
-  handlePageChange(page) {
-    hashHistory.push(`/app/${page}`)
-  }
+  className += isActive
+    ? 'news-pagination__page--active'
+    : ''
 
-  render() {
-
-    const { page, isActive } = this.props;
-    const className = isActive 
-      ? 'news-pagination__page--active'
-      : ''
-
-    return (
-      <li className={`news-pagination__page ${className}`}
-          onClick={this.handlePageChange.bind(this, page)}>{page}
-      </li>
-    );
-  }
-}
+  return (
+    <li className={className} onClick={props.onClick}>
+      {page}
+    </li>
+  );
+};
 
 export default Page;

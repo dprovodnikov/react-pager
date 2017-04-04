@@ -1,24 +1,22 @@
 import React, { Component } from 'react';
 import Search from './search.jsx';
-import Popup from './popup.jsx';
-import AddNews from './add-news.jsx';
-import * as UserActions from '../actions/user-actions.js';
-import { hashHistory } from 'react-router';
+// import Popup from './popup.jsx';
+// import AddNews from './add-news.jsx';
+import { logout } from '../actions/user-actions.js';
+import { browserHistory } from 'react-router';
+
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 class Layout extends Component {
-  
+
   handleLogout() {
-    UserActions.logout();
-    hashHistory.push('/login');
+    this.props.logout();
   }
 
   render() {
     return (
       <div>
-        
-        <AddNews />
-
-        <Popup duration="2000"/>
 
         <header className="app-header">
           <div className="app-container">
@@ -26,7 +24,7 @@ class Layout extends Component {
              <span className="main-color">ReactJS</span>&nbsp;pager
             </div>
             <Search />
-            <button className="app-header__btn" onClick={this.handleLogout}>
+            <button className="app-header__btn" onClick={() => this.handleLogout()}>
               <i className="ion-log-out"></i>
             </button>
           </div>
@@ -43,4 +41,8 @@ class Layout extends Component {
   }
 }
 
-export default Layout;
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({ logout }, dispatch);
+}
+
+export default connect(null, mapDispatchToProps)(Layout);

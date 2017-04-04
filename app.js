@@ -27,7 +27,7 @@ app.use('/user', userRouter);
 app.use('/news', checkToken);
 app.use('/news', newsRouter);
 
-app.listen(config.port, err => {
+app.listen(8000, err => {
   if (err) throw err;
 
   console.log(`Running on port ${config.port}`);

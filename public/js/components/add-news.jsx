@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import * as NewsActions from '../actions/news-actions.js';
-import NewsStore from '../stores/news-store.js';
 
 class AddNews extends Component {
   constructor(props) {
@@ -44,7 +43,7 @@ class AddNews extends Component {
     if (!title.trim() || !content.trim()) {
       return false;
     }
-    
+
     if (_id) {
       NewsActions.updateNews({ title, content, _id });
     } else {

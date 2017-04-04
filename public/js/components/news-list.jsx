@@ -2,63 +2,64 @@ import React, { Component } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import NewsItem from './news-item.jsx';
 import Pagination from './pagination.jsx';
-import NewsStore from '../stores/news-store.js';
-import UserStore from '../stores/user-store.js';
-import { loadUser } from '../actions/user-actions.js';
-import { hashHistory } from 'react-router';
+
+import { fetchUser } from '../actions/user-actions.js';
+import { changePage, fetchNewsCount, fetchNewsForPage } from '../actions/news-actions.js';
+
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
+import { browserHistory } from 'react-router';
 import $ from 'jquery';
 
 class NewsList extends Component {
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      currentPage: props.params.pageNumber,
-      pagesCount: NewsStore.getPagesCount(),
-      news: NewsStore.getNews(),
-      pagesRange: NewsStore.getPagesRange(),
-      user: UserStore.getUser(),
-    }
-  }
-
   componentWillMount() {
-    NewsStore.on('change', this.updateState.bind(this));
-    UserStore.on('change', this.updateState.bind(this));
+    const { searchQuery, currentPage, perPage } = this.props;
 
-    NewsStore.loadNewsCount();
-    NewsStore.changePage(this.state.currentPage);
-    loadUser();
+    this.props.fetchNewsCount(searchQuery);
+    this.props.fetchNewsForPage({
+      page: currentPage,
+      searchQuery,
+      perPage,
+    });
   }
 
-  componentWillUnmount() {
-    NewsStore.removeAllListeners('change');
-    UserStore.removeAllListeners('change');
+  getPagesCount() {
+    const { perPage, total } = this.props;
+
+    return Math.ceil(total / perPage);
   }
 
-  updateState() {
-    const { pageNumber } = this.props.params;
-    const pagesCount = NewsStore.getPagesCount();
-    const user = UserStore.getUser();
+  componentWillUpdate(nextProps) {
+    const { currentPage, params: { pageNumber } } = nextProps;
 
-    if (pageNumber > pagesCount) {
-      return hashHistory.push(`/app/${pagesCount}`);
+    if (currentPage != pageNumber) {
+      nextProps.changePage(pageNumber);
+
+      nextProps.fetchNewsForPage({
+        page: pageNumber,
+        searchQuery: nextProps.searchQuery,
+        perPage: nextProps.perPage,
+      });
     }
 
-    this.setState({
-      currentPage: NewsStore.getCurrentPage(),
-      pagesCount: pagesCount,
-      news: NewsStore.getNews(),
-      user,
-    });
-  
-    $('body').animate({'scrollTop': 0}, 50);
+    if (!nextProps.user.isAuthorized) {
+      browserHistory.push('/login');
+    }
+
+    if (nextProps.searchQuery != this.props.searchQuery) {
+      nextProps.fetchNewsCount(nextProps.searchQuery)
+      nextProps.fetchNewsForPage({
+        page: pageNumber,
+        searchQuery: nextProps.searchQuery,
+        perPage: nextProps.perPage,
+      });
+    }
   }
 
   render() {
-    const { pagesCount, pagesRange, news, user } = this.state;
-    const { pageNumber:currentPage = NewsStore.getCurrentPage() } = this.props.params;
-    const totalNewsCount = NewsStore.getNewsCount();
+    const pagesCount = this.getPagesCount();
+    const { currentPage, pagesRange, news, user, total } = this.props;
 
     const newsList = news.map(newsItem => {
       return <NewsItem key={newsItem._id} item={newsItem} user={user}/>
@@ -72,7 +73,7 @@ class NewsList extends Component {
 
     const titleContent = (news.length <= 0)
       ? 'No news for now. Try later'
-      : `${news.length} of ${totalNewsCount} on the page`
+      : `${news.length} of ${total} on the page`
 
     return (
       <span>
@@ -88,4 +89,25 @@ class NewsList extends Component {
   }
 }
 
-export default NewsList;
+const mapStateToProps = (state) => {
+  return {
+    currentPage: state.pages.currentPage,
+    perPage: state.pages.perPage,
+    pagesRange: state.pages.pagesRange,
+    news: state.news.onPage,
+    total: state.news.total,
+    user: state.user,
+    searchQuery: state.searchQuery,
+  };
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+    changePage,
+    fetchUser,
+    fetchNewsForPage,
+    fetchNewsCount,
+  }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewsList);

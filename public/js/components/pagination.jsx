@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import Page from './page.jsx';
 import PageMobile from './page-mobile.jsx';
 import { range } from '../utils/range.js';
-import { hashHistory } from 'react-router';
-import * as NewsActions from '../actions/news-actions.js';
+import { browserHistory } from 'react-router';
 
 class Pagination extends Component {
   constructor(props) {
@@ -33,7 +32,7 @@ class Pagination extends Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.reloadOnBreakpoint.bind(this));
+    window.removeEventListener('resize', this.reloadOnBreakpoint);
   }
 
   isMobileVersion() {
@@ -42,7 +41,7 @@ class Pagination extends Component {
 
   hasPrev(current) {
     return current > 1;
-  } 
+  }
 
   hasNext(current) {
     return current < this.props.pagesCount;
@@ -50,21 +49,21 @@ class Pagination extends Component {
 
   increasePage(current) {
     if (this.hasNext(current)) {
-      hashHistory.push(`/app/${+current + 1}`);
+      browserHistory.push(`/app/${+current + 1}`);
     }
   }
 
   decreasePage(current) {
     if (this.hasPrev(current)) {
-      hashHistory.push(`/app/${+current - 1}`);
+      browserHistory.push(`/app/${+current - 1}`);
     }
   }
 
   sendTo(page) {
-    hashHistory.push(`/app/${page}`);
+    browserHistory.push(`/app/${page}`);
   }
 
-  getPages() {
+  renderPages() {
     let output;
     const { currentPage, pagesCount } = this.props;
 
@@ -74,10 +73,16 @@ class Pagination extends Component {
       } else null
     } else {
       output = range(this.getRangeStart(), this.getRangeEnd()).map(page => {
-        return <Page key={page} page={page} isActive={currentPage == page} />
+        return (
+          <Page key={page}
+            page={page}
+            isActive={currentPage == page}
+            onClick={() => browserHistory.push(`/app/${page}`)}
+          />
+        )
       });
     }
-    
+
     return output;
   }
 
@@ -114,20 +119,18 @@ class Pagination extends Component {
   }
 
   render() {
-    const { currentPage = 1, pagesCount } = this.props;
+    const { currentPage, pagesCount } = this.props;
 
-    NewsActions.changePage(currentPage);
+    const pages = this.renderPages();
 
-    const pages = this.getPages();
-
-    const prevButton = currentPage > 1
-      ? <li className="news-pagination__arrow" onClick={this.decreasePage.bind(this, currentPage)}>
+    const prevButton = (currentPage > 1)
+      ? <li className="news-pagination__arrow" onClick={() => this.decreasePage(currentPage)}>
           <i className="ion-chevron-left"></i>
         </li>
       : null
 
-    const nextButton = currentPage < pagesCount
-      ? <li className="news-pagination__arrow" onClick={this.increasePage.bind(this, currentPage)}>
+    const nextButton = (currentPage < pagesCount)
+      ? <li className="news-pagination__arrow" onClick={() => this.increasePage(currentPage)}>
           <i className="ion-chevron-right"></i>
         </li>
       : null

@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
-import * as NewsActions from '../actions/news-actions.js';
+import { changeSearchQuery } from '../actions/news-actions.js';
+import { connect } from 'react-redux';
 
 class Search extends Component {
-  
-  handleInput() {
-    let { value } = this.refs.q;
-    NewsActions.changeSearchQuery(value.toLowerCase());
+  handleInput({ target }) {
+    const term = target.value.toLowerCase();
+    this.props.changeSearchQuery(term);
   }
 
   render() {
     return (
       <div className="app-header__search">
         <i className="ion-ios-search-strong"></i>
-        <input ref="q" placeholder="Search..." onInput={this.handleInput.bind(this)}/>
+        <input name="term" placeholder="Search..." onInput={event => this.handleInput(event)}/>
       </div>
     );
   }
 }
 
-export default Search;
+export default connect(null, { changeSearchQuery })(Search);

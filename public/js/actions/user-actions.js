@@ -1,24 +1,37 @@
-import dispatcher from '../dispatcher';
 import types from '../actions/types';
+import $ from 'jquery';
 
-export function loadUser() {
-  dispatcher.dispatch({ type: types.LOAD_USER });
+export const fetchUser = () => {
+  const request = $.post('/user/bytoken/', {
+    token: localStorage.getItem('jwt-token')
+  });
+
+  return {
+    type: types.FETCH_USER,
+    payload: request,
+  };
 }
 
-export function registrate(credentials) {
-  dispatcher.dispatch({
+export const registrate = ({ username, password, isAdmin = false}) => {
+  const request = $.post('/user/signup', { username, password, isAdmin });
+
+  return {
     type: types.REGISTER_USER,
-    credentials,
-  })
+    payload: request,
+  };
 }
 
-export function authorizate(credentials) {
-  dispatcher.dispatch({
+export const authorizate = ({ username, password }) => {
+  const request = $.post('/user/signin', { username, password })
+
+  return {
     type: types.AUTHORIZE_USER,
-    credentials,
-  })
+    payload: request
+  };
 }
 
-export function logout() {
-  dispatcher.dispatch({ type: types.LOGOUT })
+export const logout = () => {
+  return {
+    type: types.LOGOUT
+  };
 }
