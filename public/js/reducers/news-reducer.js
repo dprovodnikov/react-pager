@@ -8,10 +8,14 @@ const initialState = {
 export default (state = initialState, { type, payload }) => {
   switch(type) {
     case types.NEWS_DELETE: {
-      return state;
+      return Object.assign({}, state, {
+        total: state.total - 1
+      });
     }
     case types.ADD_NEWS: {
-      return state;
+      return Object.assign({}, state, {
+        total: state.total + 1,
+      });
     }
     case types.FETCH_NEWS_COUNT: {
       return Object.assign({}, state, {

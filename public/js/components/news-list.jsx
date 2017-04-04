@@ -4,7 +4,7 @@ import NewsItem from './news-item.jsx';
 import Pagination from './pagination.jsx';
 
 import { fetchUser } from '../actions/user-actions.js';
-import { changePage, fetchNewsCount, fetchNewsForPage } from '../actions/news-actions.js';
+import * as NewsActions from '../actions/news-actions.js';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -16,6 +16,7 @@ class NewsList extends Component {
   componentWillMount() {
     const { searchQuery, currentPage, perPage } = this.props;
 
+    this.props.fetchUser();
     this.props.fetchNewsCount(searchQuery);
     this.props.fetchNewsForPage({
       page: currentPage,
@@ -33,14 +34,18 @@ class NewsList extends Component {
   componentWillUpdate(nextProps) {
     const { currentPage, params: { pageNumber } } = nextProps;
 
-    if (currentPage != pageNumber) {
-      nextProps.changePage(pageNumber);
-
+    const fetchNews = () => {
+      nextProps.fetchNewsCount(nextProps.searchQuery)
       nextProps.fetchNewsForPage({
         page: pageNumber,
         searchQuery: nextProps.searchQuery,
         perPage: nextProps.perPage,
       });
+    }
+
+    if (currentPage != pageNumber) {
+      nextProps.changePage(pageNumber);
+      fetchNews();
     }
 
     if (!nextProps.user.isAuthorized) {
@@ -48,12 +53,11 @@ class NewsList extends Component {
     }
 
     if (nextProps.searchQuery != this.props.searchQuery) {
-      nextProps.fetchNewsCount(nextProps.searchQuery)
-      nextProps.fetchNewsForPage({
-        page: pageNumber,
-        searchQuery: nextProps.searchQuery,
-        perPage: nextProps.perPage,
-      });
+      fetchNews();
+    }
+
+    if (this.props.total != nextProps.total) {
+      fetchNews();
     }
   }
 
@@ -62,7 +66,14 @@ class NewsList extends Component {
     const { currentPage, pagesRange, news, user, total } = this.props;
 
     const newsList = news.map(newsItem => {
-      return <NewsItem key={newsItem._id} item={newsItem} user={user}/>
+      return (
+        <NewsItem
+          key={newsItem._id}
+          item={newsItem}
+          user={user}
+          onDelete={this.props.deleteNews}
+        />
+      )
     });
 
     const transitionOptions = {
@@ -103,10 +114,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    changePage,
+    fetchNewsForPage: NewsActions.fetchNewsForPage,
+    fetchNewsCount: NewsActions.fetchNewsCount,
+    changePage: NewsActions.changePage,
+    deleteNews: NewsActions.deleteNews,
     fetchUser,
-    fetchNewsForPage,
-    fetchNewsCount,
   }, dispatch);
 }
 

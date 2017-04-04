@@ -1,75 +1,68 @@
 import React, { Component } from 'react';
 import * as NewsActions from '../actions/news-actions.js';
 
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
 class AddNews extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       show: false,
-      title: 'Add new task',
-      instance: {},
-    }
+      formTitle: 'Add new task',
+      instance: {
+        title: '',
+        content: '',
+        _id: null,
+      },
+    };
   }
 
-  componentWillMount() {
-    NewsStore.on('change', this.updateState.bind(this));
-  }
-
-  componentWillUnmount() {
-    NewsStore.removeListener('change', this.updateState.bind(this));
-  }
-
-  updateState() {
-    const editingInfo = NewsStore.isEditing()
-
-    if (!editingInfo) return false;
-
-    const { instance } = editingInfo;
-
-    this.state.show = true;
-    this.state.title = 'Update task'
-    this.state.instance = instance;
-    this.setState(this.state);
-  }
-
-  handleSave() {
-    const [ title, content, _id ] = [
-      this.refs.title.value,
-      this.refs.content.value,
-      this.refs.id.value
-    ];
-
-    if (!title.trim() || !content.trim()) {
-      return false;
-    }
-
-    if (_id) {
-      NewsActions.updateNews({ title, content, _id });
+  onSave(event) {
+    if (this.state.instance._id) {
+      this.props.updateNews(this.state.instance);
     } else {
-      NewsActions.addNews({ title, content });
+      this.props.addNews(this.state.instance);
     }
 
-    this.state.instance = {};
-    this.state.title = 'Add new task';
-    this.state.show = false;
-    this.setState(this.state);
+    const nextState = Object.assign({}, this.state, {
+      instance: {},
+      formTitle: 'Add new task',
+      show: false,
+    });
 
-    NewsActions.completeEditing();
+    this.setState(nextState);
+    this.props.completeEditing();
+
+    event.preventDefault();
+  }
+
+  onInput({ target: { name, value } }) {
+    const instance = Object.assign({}, this.state.instance, {
+      [name]: value,
+    });
+
+    this.setState(Object.assign({}, this.state, { instance }));
   }
 
   showForm() {
-    this.state.show = true;
-    this.setState(this.state);
+    const nextState = Object.assign({}, this.state, {
+      show: true
+    });
+
+    this.setState(nextState);
   }
 
   hideForm() {
-    this.state.show = false;
-    this.state.instance = {};
-    this.state.title = 'Add new task';
-    this.setState(this.state);
+    const nextState = Object.assign({}, this.state, {
+      show: false,
+      instance: {},
+      formTitle: 'Add new task',
+    });
 
-    NewsActions.completeEditing();
+    this.setState(nextState);
+    this.props.completeEditing();
   }
 
   renderForm() {
@@ -77,13 +70,34 @@ class AddNews extends Component {
 
     return (this.state.show)
       ? <div>
-          <div className="overlay" onClick={this.hideForm.bind(this)}></div>
+          <div className="overlay" onClick={() => this.hideForm()}></div>
           <form className="add-news">
-            <h2 className="add-news__heading">{this.state.title}</h2>
-            <input type="hidden" ref="id" defaultValue={_id}/>
-            <input className="add-news__title" ref="title" placeholder="Title" defaultValue={title}/>
-            <textarea className="add-news__content" ref="content" placeholder="Content" defaultValue={content}></textarea>
-            <button className="add-news__btn" onClick={this.handleSave.bind(this)}>Save</button>
+            <h2 className="add-news__heading">{this.state.formTitle}</h2>
+
+            <input
+              type="hidden"
+              name="_id"
+              defaultValue={_id}
+              onChange={event => this.onInput(event)}
+            />
+
+            <input
+              className="add-news__title"
+              name="title"
+              placeholder="Title"
+              defaultValue={title}
+              onChange={event => this.onInput(event)}
+            />
+
+            <textarea
+              className="add-news__content"
+              name="content"
+              placeholder="Content"
+              defaultValue={content}
+              onChange={event => this.onInput(event)}
+            ></textarea>
+
+            <button className="add-news__btn" onClick={event => this.onSave(event)}>Save</button>
           </form>
         </div>
       : null
@@ -93,7 +107,7 @@ class AddNews extends Component {
     return (
       <div>
         {this.renderForm()}
-        <button className="new-news-btn" onClick={this.showForm.bind(this)}>
+        <button className="new-news-btn" onClick={() => this.showForm()}>
           <i className="ion-android-add"></i>
         </button>
       </div>
@@ -101,4 +115,12 @@ class AddNews extends Component {
   }
 }
 
-export default AddNews;
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+    updateNews: NewsActions.updateNews,
+    addNews: NewsActions.addNews,
+    completeEditing: NewsActions.completeEditing,
+  }, dispatch);
+};
+
+export default connect(null, mapDispatchToProps)(AddNews);

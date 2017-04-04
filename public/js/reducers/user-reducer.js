@@ -29,12 +29,11 @@ export default (state = initialState, { type, payload }) => {
     }
     case types.FETCH_USER: {
       const { _id, isAdmin } = payload;
-      const isAuthorized = state._id == _id;
 
       return Object.assign({}, state, {
-        isAuthorized,
+        isAuthorized: true,
         isAdmin,
-        _id,
+        _id
       });
     }
     default: {

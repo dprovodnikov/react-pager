@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 class NewsItem extends Component {
   handleNewsDelete(_id) {
-    console.log(`delete ${_id}`);
+    this.props.onDelete(_id);
   }
 
   handleNewsEditRequest(item) {

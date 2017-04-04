@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Search from './search.jsx';
 // import Popup from './popup.jsx';
-// import AddNews from './add-news.jsx';
+import AddNews from './add-news.jsx';
 import { logout } from '../actions/user-actions.js';
 import { browserHistory } from 'react-router';
 
@@ -17,7 +17,7 @@ class Layout extends Component {
   render() {
     return (
       <div>
-
+        <AddNews />
         <header className="app-header">
           <div className="app-container">
             <div className="app-header__title">
@@ -29,13 +29,11 @@ class Layout extends Component {
             </button>
           </div>
         </header>
-
         <section className="app-content">
           <div className="app-container">
             {this.props.children}
           </div>
         </section>
-
       </div>
     );
   }

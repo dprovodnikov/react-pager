@@ -19,7 +19,7 @@ export const fetchNewsCount = (searchQuery) => {
     url: `/news/count?q=${searchQuery}`,
     method: 'GET',
     headers: getHeaders(),
-});
+  });
 
   return {
     type: types.FETCH_NEWS_COUNT,
